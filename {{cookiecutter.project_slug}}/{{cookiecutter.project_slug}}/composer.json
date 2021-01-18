@@ -1,0 +1,26 @@
+{
+    "name": "{{ cookiecutter.package_name }}",
+    "type": "application",
+    "description": "{{ cookiecutter.project_name }}",
+    "keywords": [
+        "php"
+    ],
+    "homepage": "{{ cookiecutter.repo_url }}",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "{{ cookiecutter.author_name }}",
+            "email": "{{ cookiecutter.author_email }}"
+        }
+    ],
+    "require": {
+        "php": "^7.2",
+        "itseasy/slim-app": "dev-main",
+        "itseasy/laminas-db": "dev-main"
+    },
+    "autoload": {
+        "psr-4": {
+            "{{ cookiecutter.project_namespace }}\\": "src/"
+        }
+    }
+}

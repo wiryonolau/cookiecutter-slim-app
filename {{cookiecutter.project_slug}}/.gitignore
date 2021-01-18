@@ -1,0 +1,13 @@
+*.swp
+*.bak
+.env
+build
+dist
+*.dist
+*.dist.*
+auth
+*~
+.composer
+composer.lock
+*.tar.gz
+*.zip

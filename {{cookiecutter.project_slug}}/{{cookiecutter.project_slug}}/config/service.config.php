@@ -1,0 +1,15 @@
+<?php
+
+namespace {{ cookiecutter.project_namespace }};
+
+return [
+    "service" => [
+        "factories" => [
+            Database::class => Database\Factory\DatabaseFactory::class,
+            Provider\UserProvider::class => Provider\Factory\UserProviderFactory::class,
+            Repository\UserRepository::class => Repository\Factory\UserRepositoryFactory::class,
+            Service\UserService::class => Service\Factory\UserServiceFactory::class,
+        ]
+    ],
+];
+
