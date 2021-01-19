@@ -23,6 +23,7 @@ start:
 	fi
 	docker network create $$(basename "`pwd`")
 	docker run --rm -it -d \
+		-p "127.0.0.1:3306:3306" \
         -e MYSQL_ROOT_PASSWORD=888888 \
         -e MYSQL_USER=$$(basename "`pwd`") \
         -e MYSQL_PASSWORD=888888 \
