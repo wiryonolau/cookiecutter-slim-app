@@ -15,6 +15,12 @@ return [
             ]
         ]
     ],
+    "view_helpers" => [
+        "aliases" => [
+            "navigation" => View\Helper\NavigationHelper::class,
+        ],
+        "factories" => [
+            View\Helper\NavigationHelper::class => View\Helper\Factory\NavigationHelperFactory::class,
+        ]
+    ]
 ];
-
-

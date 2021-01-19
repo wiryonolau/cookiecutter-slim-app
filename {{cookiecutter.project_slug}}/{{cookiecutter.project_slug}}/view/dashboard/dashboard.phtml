@@ -1,22 +1,3 @@
 <?= $message ?>
 
 Template : view/dashboard/dashboard.phtml
-
-<div>
-<table>
-    <thead>
-        <tr>
-            <th>User</th>
-            <th>Email</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php foreach($users as $user) : ?>
-        <tr>
-            <?= sprintf("<td>%s</td>", $user->username); ?>
-            <?= sprintf("<td>%s</td>", $user->email); ?>
-        </tr>
-        <?php endforeach; ?>
-    </tbody>
-</table>
-</div>

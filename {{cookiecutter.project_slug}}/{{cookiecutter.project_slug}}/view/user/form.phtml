@@ -1,0 +1,22 @@
+<a href="<?= $this->url("/user/list") ?>">Back To List</a>
+
+<form method="post" action="<?= $this->url(sprintf("/user/%d", $user->id)) ?>">
+<?= $this->csrf() ?>
+<div>
+<label>ID</label>
+<input type="text" readonly="readonly" placeholder="Auto Generated" name="id" value="<?= $user->id ?>" />
+</div>
+<div>
+<label>Username</label>
+<input type="text" name="username" value="<?= $user->username ?>" />
+</div>
+<div>
+<label>Email</label>
+<input type="text" name="email" value="<?= $user->email ?>" />
+</div>
+<div>
+<label>Password</label>
+<input type="password" name="password" value="<?= $user->password ?>" />
+</div>
+<input type="submit" value="Submit" />
+</form>

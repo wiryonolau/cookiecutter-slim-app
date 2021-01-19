@@ -28,25 +28,15 @@ class UserRepository {
         return $this->db->execute($select);
     }
 
-    public function save(UserModel $user) : Result {
+    public function save(UserModel $user) : UserModel {
         $this->db->beginTransaction();
 
         try {
-            $selectResult = $this->getUserById($user->id);
-            if ($selectResult->isEmpty()) {
-                $insert = new Sql\Insert("user");
-                $insert->values([
-                    "username" => $user->username,
-                    "password" => $user->password
-                ]);
-                $insertResult = $this->db->execute($insert);
-                if ($insertResult->isError()) {
-                    throw new Exception("Unable to add new user");
-                }
-            } else {
+            if ($user->id) {
                 $update = new Sql\Update("user");
-                $update->values([
+                $update->set([
                     "username" => $user->username,
+                    "email" => $user->email,
                     "password" => $user->password
                 ]);
                 $update->where([
@@ -56,10 +46,29 @@ class UserRepository {
                 if ($updateResult->isError()) {
                     throw new Exception("Unable to update user data");
                 }
+                $id = $user->id;
+            } else {
+                $insert = new Sql\Insert("user");
+                $insert->values([
+                    "username" => $user->username,
+                    "email" => $user->email,
+                    "password" => $user->password
+                ]);
+                $insertResult = $this->db->execute($insert);
+                if ($insertResult->isError()) {
+                    throw new Exception("Unable to add new user");
+                }
+
+                $id = $insertResult->getGeneratedValue();
             }
             $this->db->commit();
+
+            $select = $this->getUserById($id);
+            $select->setObject(UserModel::class);
+            return $select->getFirstRow();
         } catch (Exception $e) {
             $this->db->rollback();
+            return new UserModel();
         }
     }
 }
