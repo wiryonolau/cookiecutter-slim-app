@@ -14,7 +14,10 @@
             <?= sprintf("<td>%s</td>", $user->username); ?>
             <?= sprintf("<td>%s</td>", $user->email); ?>
             <td>
-            <?= sprintf("<a href=\"%s\">Edit</a>", $this->url(sprintf("/user/%d", $user->id))); ?>
+                <ul class="row-action">
+                    <?= sprintf("<li><a href=\"%s\">Edit</a></li>", $this->url(sprintf("/user/%d", $user->id))); ?>
+                    <?= sprintf("<li><a href=\"%s\">Delete</a></li>", $this->url(sprintf("/user/%d", $user->id), ["delete" => 1])); ?>
+                </ul>
             </td>
         </tr>
         <?php endforeach; ?>

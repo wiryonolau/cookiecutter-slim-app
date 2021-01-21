@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace {{ cookiecutter.project_namespace }};
 
@@ -12,4 +13,3 @@ return [
         ]
     ],
 ];
-

@@ -1,4 +1,5 @@
-<?php                                                                                                                                                                        
+<?php
+declare(strict_types=1);
 
 namespace {{ cookiecutter.project_namespace }}\Service\Factory;
 
@@ -12,5 +13,3 @@ class UserServiceFactory {
         return new UserService($userRepository);
     }
 }
-
-

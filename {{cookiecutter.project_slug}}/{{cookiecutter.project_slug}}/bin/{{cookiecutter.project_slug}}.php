@@ -17,12 +17,11 @@ if (php_sapi_name() === 'cli-server') {
 
 // Composer autoloading
 include __DIR__ . '/../vendor/autoload.php';
-include __DIR__ . '/helper.php';
+include __DIR__ . '/../public/helper.php';
 
 $app = new Itseasy\Application([
     "config_path" => [
         __DIR__."/../config/*.{local,config}.php",
     ]
 ]);
-$app->build();
-$app->run();
+$app->setApplicationType(Itseasy\Application::APP_CONSOLE)->run();                                                                        

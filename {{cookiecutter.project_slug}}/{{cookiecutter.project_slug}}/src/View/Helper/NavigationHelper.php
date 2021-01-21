@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace {{cookiecutter.project_namespace}}\View\Helper;
 
@@ -14,7 +15,6 @@ class NavigationHelper
     {
         $this->navigation = $navigation;
     }
-
 
     public function __invoke(?string $name = "default")
     {

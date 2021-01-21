@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace {{ cookiecutter.project_namespace }}\Action;
 
@@ -22,9 +23,7 @@ class UserAction extends InvokableAction {
         $user_id = $this->getArgument("id", null);
 
         if (is_null($user_id)) {
-            $createUser = $this->getQuery("create", false);
-
-            if ($createUser) {
+            if ($this->getQuery("create", false)) {
                 return $this->render("user/form", [
                     "layout" => [
                         "content_title" => "Add New User"
@@ -41,10 +40,22 @@ class UserAction extends InvokableAction {
             ]);
         }
 
-        $user = $this->userProvider->getUserById($user_id);
+        $user = $this->userProvider->getUserById(intval($user_id));
+
         if (!$user->id) {
             throw new HttpForbiddenException($this->request, 403);
         }
+
+        if ($this->getQuery("delete", false)) {
+            if ($this->userService->remove($user)) {
+                $this->view->flash()->set("success", "User Deleted");
+            } else {
+                $this->view->flash()->set("error", "Cannot delete user");
+            }
+            $redirect_url = $this->view->url("/user/list");
+            return $this->response->withHeader("Location", $redirect_url);
+        }
+
         return $this->render("user/form", [
             "layout" => [
                 "content_title" => "Edit User"

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace {{ cookiecutter.project_namespace }}\Repository;
 
@@ -26,6 +27,14 @@ class UserRepository {
             "id" => $id
         ]);
         return $this->db->execute($select);
+    }
+
+    public function remove(UserModel $user) : Result {
+        $delete = new Sql\Delete("user");
+        $delete->where([
+            "id" => $user->id
+        ]);
+        return $this->db->execute($delete);
     }
 
     public function save(UserModel $user) : UserModel {
@@ -63,7 +72,7 @@ class UserRepository {
             }
             $this->db->commit();
 
-            $select = $this->getUserById($id);
+            $select = $this->getUserById(intval($id));
             $select->setObject(UserModel::class);
             return $select->getFirstRow();
         } catch (Exception $e) {
