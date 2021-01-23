@@ -24,4 +24,6 @@ $app = new Itseasy\Application([
         __DIR__."/../config/*.{local,config}.php",
     ]
 ]);
-$app->setApplicationType(Itseasy\Application::APP_CONSOLE)->run();                                                                        
+$app->setApplicationType(Itseasy\Application::APP_CONSOLE); 
+$app->build();
+$app->run();
