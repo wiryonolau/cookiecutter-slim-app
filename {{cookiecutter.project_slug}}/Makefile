@@ -8,19 +8,22 @@ help: ## This help.
 .DEFAULT_GOAL := help
 
 THIS_FILE := $(lastword $(MAKEFILE_LIST))
+PHP_VERSION ?= "7.3"
 
 %:
 	@echo ""
 all:
 	@echo ""
+build:
+	@if [ "$$(docker images -q php:$(PHP_VERSION)-apache-ext 2>/dev/null)" = "" ]; then \
+		cd $$(pwd)/docker/php-apache-ext && docker build --build-arg PHP_VERSION=$(PHP_VERSION) -t php:$(PHP_VERSION)-apache-ext .; \
+	fi
 start:
 	$(MAKE) stop
 	mkdir -p $$(pwd)/etc/apache2/sites-enabled
 	touch $$(pwd)/etc/apache2/sites-enabled/$$(basename "`pwd`").conf
 	mkdir -p $$(pwd)/init_db
-	@if [ "$$(docker images -q php:7.3-apache-ext 2>/dev/null)" = "" ]; then \
-		cd $$(pwd)/docker/php-apache-ext && docker build --build-arg PHP_VERSION=7.3 -t php:7.3-apache-ext .; \
-	fi
+	$(MAKE) build
 	docker network create $$(basename "`pwd`")
 	docker run --rm -it -d \
 		-p "127.0.0.1:3306:3306" \
@@ -43,7 +46,7 @@ start:
         -v $$(pwd)/etc/apache2/sites-enabled:/etc/apache2/sites-enabled \
         --name $$(basename "`pwd`")_httpd \
         --network $$(basename "`pwd`") \
-	php:7.3-apache-ext
+	php:$(PHP_VERSION)-apache-ext
 stop:
 	docker stop $$(basename "`pwd`")_httpd || true
 	docker stop $$(basename "`pwd`")_mysql || true
