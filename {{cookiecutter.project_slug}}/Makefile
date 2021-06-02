@@ -72,3 +72,9 @@ composer:
         -e COMPOSER_HOME="/srv/$$(basename "`pwd`")/.composer" \
         --user $$(id -u):$$(id -g) \
     composer composer $(filter-out $@,$(MAKECMDGOALS))
+yarn:
+	docker run --rm -it \
+        -v $$(pwd)/$$(basename "`pwd`"):/srv/$$(basename "`pwd`") \
+        -w /srv/$$(basename "`pwd`") \
+        --user $$(id -u):$$(id -g) \
+    node:lts-slim yarn $(filter-out $@,$(MAKECMDGOALS))
