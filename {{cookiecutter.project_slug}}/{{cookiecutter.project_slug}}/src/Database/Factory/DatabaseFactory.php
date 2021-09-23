@@ -21,6 +21,8 @@ class DatabaseFactory {
             'driver_options' => $config["driver_options"]
         ]);
 
-        return new Database($adapter);
+        $logger = $container->get("Logger");
+
+        return new Database($adapter, $logger);
     }
 }
