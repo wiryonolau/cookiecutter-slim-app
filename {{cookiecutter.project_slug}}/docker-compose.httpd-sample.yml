@@ -1,0 +1,46 @@
+version: "3.2"
+
+services:
+    app:
+        build:
+            context: ./docker/php-apache-ext
+            args:
+                - PHP_VERSION=${PHP_VERSION:-7.4}
+        image: php:${PHP_VERSION:-7.4}-fpm-ext
+        ports:
+            - ${HTTP_PORT:-8080}:80
+        environment:
+            - APACHE_RUN_GROUP=#${GROUPID:-1000}
+            - MYSQL_USER={{ cookiecutter.project_slug }}
+            - MYSQL_PASSWORD=888888
+            - MYSQL_DATABASE={{ cookiecutter.project_slug }}
+            - MYSQL_HOSTNAME=mysql
+        volumes:
+            - ./{{ cookiecutter.project_slug }}:/var/www/html
+            - ./etc/apache2/sites-enabled:/etc/apache2/sites-enabled
+        restart: unless-stopped
+        depends_on:
+            - mysql
+    mysql:
+        image: mysql:5.7
+        ports:
+            - ${MYSQL_PORT:-3306}:3306
+        environment:
+            - MYSQL_ROOT_PASSWORD=888888
+            - MYSQL_USER={{ cookiecutter.project_slug }}
+            - MYSQL_PASSWORD=888888
+            - MYSQL_DATABASE={{ cookiecutter.project_slug }}
+        volumes:
+            - ./init_db:/docker-entrypoint-initdb.d
+        healthcheck:
+            test:
+                - "CMD"
+                - "mysqladmin"
+                - "ping"
+                - "--user=app"
+                - "--password=888888"
+                - "-h"
+                - "localhost"
+            timeout: 5s
+            retries: 10
+        restart: unless-stopped

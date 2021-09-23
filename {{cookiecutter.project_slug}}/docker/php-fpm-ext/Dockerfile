@@ -1,5 +1,5 @@
 ARG PHP_VERSION=7.4
-FROM php:$PHP_VERSION-apache
+FROM php:$PHP_VERSION-fpm
 
 ARG MEMCACHED_VERSION=3.1.5
 
@@ -32,20 +32,18 @@ RUN docker-php-ext-configure imap --with-kerberos --with-imap-ssl \
     && docker-php-ext-install bcmath \
     && docker-php-ext-install json \
     && docker-php-ext-install xml xmlrpc \
-    && docker-php-ext-install intl \ 
-    && docker-php-ext-install curl \ 
+    && docker-php-ext-install intl \
+    && docker-php-ext-install curl \
     && docker-php-ext-install zip \
     && docker-php-ext-install ldap \
     && docker-php-ext-install iconv \
     && docker-php-ext-install soap \
+    && docker-php-ext-install sockets \
     && docker-php-ext-enable memcached \
-    && apt-get purge -y libc-client-dev libkrb5-dev libicu-dev g++ libcurl4-gnutls-dev libxml2-dev libldap2-dev \  
+    && apt-get purge -y libc-client-dev libkrb5-dev libicu-dev g++ libcurl4-gnutls-dev libxml2-dev libldap2-dev \
     && apt-get -y --purge autoremove \
     && apt-get -y clean \
     && rm -rf /var/lib/apt/list/* /tmp/* /var/tmp/*
 
 # Enable docker logs by passing output to /dev/pts/0 when tty is used
 RUN usermod -a -G tty www-data
- 
-# Enable Apache Extension
-RUN a2enmod rewrite;

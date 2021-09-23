@@ -1,0 +1,57 @@
+version: "3.2"
+
+services:
+    nginx:
+        image: nginx:alpine
+        ports:
+            - ${HTTP_PORT:-8080}:80
+        volumes:
+            - ./etc/nginx/conf.d:/etc/nginx/conf.d
+        depends_on:
+            - app
+    app:
+        build:
+            context: ./docker/php-fpm-ext
+            args:
+                - PHP_VERSION=${PHP_VERSION:-7.4}
+        image: php:${PHP_VERSION:-7.4}-fpm-ext
+        command:
+            - /bin/bash
+            - -c
+            - |
+              usermod -u ${USERID:-1000} www-data
+              groupmod -g ${GROUPID:-1000} www-data
+              php-fpm
+        environment:
+            - MYSQL_USER={{ cookiecutter.project_slug }}
+            - MYSQL_PASSWORD=888888
+            - MYSQL_DATABASE={{ cookiecutter.project_slug }}
+            - MYSQL_HOSTNAME=mysql
+        volumes:
+            - ./{{ cookiecutter.project_slug }}:/var/www/html
+        restart: unless-stopped
+        depends_on:
+            - mysql
+    mysql:
+        image: mysql:5.7
+        ports:
+            - ${MYSQL_PORT:-3306}:3306
+        environment:
+            - MYSQL_ROOT_PASSWORD=888888
+            - MYSQL_USER={{ cookiecutter.project_slug }}
+            - MYSQL_PASSWORD=888888
+            - MYSQL_DATABASE={{ cookiecutter.project_slug }}
+        volumes:
+            - ./init_db:/docker-entrypoint-initdb.d
+        healthcheck:
+            test:
+                - "CMD"
+                - "mysqladmin"
+                - "ping"
+                - "--user={{ cookiecutter.project_slug }}"
+                - "--password=888888"
+                - "-h"
+                - "localhost"
+            timeout: 5s
+            retries: 10
+        restart: unless-stopped
