@@ -29,6 +29,7 @@ services:
             - MYSQL_HOSTNAME=mysql
         volumes:
             - ./{{ cookiecutter.project_slug }}:/var/www/html
+            - ./usr/local/etc/php/php.ini:/usr/local/etc/php/php.ini
         restart: unless-stopped
         depends_on:
             - mysql
