@@ -17,9 +17,17 @@
         "itseasy/slim-app": "^1.1",
         "itseasy/laminas-db": "dev-main"
     },
+    "require-dev" : {
+        "phpunit/phpunit": "^9.5"
+    },
     "autoload": {
         "psr-4": {
             "{{ cookiecutter.project_namespace | replace('\\', '\\\\') }}\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4" : {
+            "{{ cookiecutter.project_namespace | replace('\\', '\\\\') }}\\Test\\": "test/"
         }
     }
 }

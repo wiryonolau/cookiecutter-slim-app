@@ -12,7 +12,8 @@ return [
     "asset" => [
         "resolver_configs" => [
             "paths" => [
-                __DIR__."/../asset/"
+                __DIR__."/../asset/",
+                __DIR__."/../node_modules/"
             ]
         ]
     ],

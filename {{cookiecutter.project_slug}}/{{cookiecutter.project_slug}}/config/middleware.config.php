@@ -17,6 +17,7 @@ return [
             Itseasy\Session\SessionMiddleware::class,
             BodyParsingMiddleware::class,
             RoutingMiddleware::class,
+            Itseasy\Navigation\NavigationMiddleware::class,
             Itseasy\Asset\AssetMiddleware::class,
             Itseasy\Http\HttpExceptionMiddleware::class,
             ErrorMiddleware::class,

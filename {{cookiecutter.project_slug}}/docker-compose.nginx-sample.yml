@@ -23,9 +23,9 @@ services:
               groupmod -g ${GROUPID:-1000} www-data
               php-fpm
         environment:
-            - MYSQL_USER={{ cookiecutter.project_slug }}
+            - MYSQL_USER={{ cookiecutter.database_name }}
             - MYSQL_PASSWORD=888888
-            - MYSQL_DATABASE={{ cookiecutter.project_slug }}
+            - MYSQL_DATABASE={{ cookiecutter.database_name }}
             - MYSQL_HOSTNAME=mysql
         volumes:
             - ./{{ cookiecutter.project_slug }}:/var/www/html
@@ -38,9 +38,9 @@ services:
             - ${MYSQL_PORT:-3306}:3306
         environment:
             - MYSQL_ROOT_PASSWORD=888888
-            - MYSQL_USER={{ cookiecutter.project_slug }}
+            - MYSQL_USER={{ cookiecutter.database_name }}
             - MYSQL_PASSWORD=888888
-            - MYSQL_DATABASE={{ cookiecutter.project_slug }}
+            - MYSQL_DATABASE={{ cookiecutter.database_name }}
         volumes:
             - ./init_db:/docker-entrypoint-initdb.d
         healthcheck:
@@ -48,8 +48,8 @@ services:
                 - "CMD"
                 - "mysqladmin"
                 - "ping"
-                - "--user={{ cookiecutter.project_slug }}"
-                - "--password=888888"
+                - "--user=`cat MYSQL_USER`"
+                - "--password=`cat MYSQL_PASSWORD`"
                 - "-h"
                 - "localhost"
             timeout: 5s

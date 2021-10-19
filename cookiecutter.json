@@ -1,6 +1,6 @@
 {
     "project_name": "Package Name",
-    "project_namespace" : "{{ cookiecutter.project_name|title|replace(' ','') }}",
+    "project_namespace" : "{{ cookiecutter.project_name|replace(' ','\\\\') }}",
     "project_slug": "{{ cookiecutter.project_name|lower|replace(' ', '-') }}",
     "database_name": "{{ cookiecutter.project_name|lower|replace(' ', '_') }}",
     "github_user": "wiryonolau",
