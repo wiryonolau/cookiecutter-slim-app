@@ -7,6 +7,7 @@ help: ## This help.
 
 .DEFAULT_GOAL := help
 
+
 THIS_FILE := $(lastword $(MAKEFILE_LIST))
 PHP_VERSION ?= "7.4"
 
@@ -44,6 +45,13 @@ stop:
 	else \
 		echo "Please create docker-compose.yml file in project root"; \
 	fi
+cli:
+	docker run --rm -it \
+        -v $$(pwd)/$$(basename "`pwd`"):/srv/$$(basename "`pwd`") \
+		-w /srv/$$(basename "`pwd`") \
+		--user "$$(id -u):$$(id -g)" \
+        --name $$(basename "`pwd`")_cli \
+    php:${PHP_VERSION}-fpm-ext bin/$$(basename "`pwd`") $(filter-out $@,$(MAKECMDGOALS))
 unittest:
 	docker run --rm -it \
         -v $$(pwd)/$$(basename "`pwd`"):/srv/$$(basename "`pwd`") \
@@ -57,14 +65,14 @@ composer-install:
         -w /srv/$$(basename "`pwd`") \
         -e COMPOSER_HOME="/srv/$$(basename "`pwd`")/.composer" \
         --user $$(id -u):$$(id -g) \
-    composer composer install --no-plugins --no-scripts --prefer-dist -v --ignore-platform-reqs
+    composer composer install --no-plugins --no-scripts --prefer-dist -v
 composer-update:
 	docker run --rm -it \
         -v $$(pwd)/$$(basename "`pwd`"):/srv/$$(basename "`pwd`") \
         -w /srv/$$(basename "`pwd`") \
         -e COMPOSER_HOME="/srv/$$(basename "`pwd`")/.composer" \
         --user $$(id -u):$$(id -g) \
-    composer composer update -v --ignore-platform-reqs
+    composer composer update --no-plugins --no-scripts --prefer-dist -v
 composer:
 	docker run --rm -it \
         -v $$(pwd)/$$(basename "`pwd`"):/srv/$$(basename "`pwd`") \
