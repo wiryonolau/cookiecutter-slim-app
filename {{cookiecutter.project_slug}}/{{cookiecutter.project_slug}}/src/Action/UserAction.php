@@ -68,7 +68,7 @@ class UserAction extends InvokableAction {
         $data = (array)$this->request->getParsedBody();
         $user = new UserModel();
 
-        $user->setData($data);
+        $user->populate($data);
         $user = $this->userService->save($user);
 
         if (!$user->id) {

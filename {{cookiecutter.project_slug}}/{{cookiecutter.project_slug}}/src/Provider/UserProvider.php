@@ -5,7 +5,8 @@ namespace {{ cookiecutter.project_namespace }}\Provider;
 
 use {{ cookiecutter.project_namespace }}\Model\UserModel;
 use {{ cookiecutter.project_namespace }}\Repository\UserRepository;
-use ArrayIterator;
+use Itseasy\Model\CollectionModel;
+use Traversable;
 
 class UserProvider {
     protected $userRepository;
@@ -14,15 +15,13 @@ class UserProvider {
         $this->userRepository = $userRepository;
     }
 
-    public function listUser() : ArrayIterator {
+    public function listUser() : Traversable {
         $result = $this->userRepository->listUser();
-        $result->setObject(UserModel::class);
-        return $result->getRows();
+        return $result->getRows(new CollectionModel(new UserModel()));
     }
 
     public function getUserById(int $id) : UserModel {
         $result = $this->userRepository->getUserById($id);
-        $result->setObject(UserModel::class);
-        return $result->getFirstRow();
+        return $result->getFirstRow(UserModel::class);
     }
 }

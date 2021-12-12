@@ -3,23 +3,11 @@ declare(strict_types=1);
 
 namespace {{cookiecutter.project_namespace}}\Model;
 
-class UserModel {
+use Itseasy\Model\AbstractModel;
+
+class UserModel extends AbstractModel {
     protected $id;
     protected $username;
     protected $email;
     protected $password;
-
-    public function __set(string $name, $value) {
-        $this->{$name} = $value;
-    }
-
-    public function __get(string $name) {
-        return $this->{$name};
-    }
-
-    public function setData(array $data = []) {
-        foreach ($data as $key => $value) {
-            $this->{$key} = $value;
-        }
-    }
 }
