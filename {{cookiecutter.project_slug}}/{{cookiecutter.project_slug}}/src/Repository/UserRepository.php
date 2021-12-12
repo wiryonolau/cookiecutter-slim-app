@@ -73,8 +73,7 @@ class UserRepository {
             $this->db->commit();
 
             $select = $this->getUserById(intval($id));
-            $select->setObject(UserModel::class);
-            return $select->getFirstRow();
+            return $select->getFirstRow(UserModel::class);
         } catch (Exception $e) {
             $this->db->rollback();
             return new UserModel();
