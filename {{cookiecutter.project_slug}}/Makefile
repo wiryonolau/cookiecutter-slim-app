@@ -80,6 +80,13 @@ composer:
         -e COMPOSER_HOME="/srv/$$(basename "`pwd`")/.composer" \
         --user $$(id -u):$$(id -g) \
     composer composer $(filter-out $@,$(MAKECMDGOALS))
+yarn-install:
+	docker run --rm -it \
+		-v $$(pwd)/$$(basename "`pwd`"):/srv/$$(basename "`pwd`") \
+		-w /srv/$$(basename "`pwd`") \
+		-e NODE_ENV=production \
+		--user $$(id -u):$$(id -g) \
+	node:lts-slim yarn install
 yarn:
 	docker run --rm -it \
 		-v $$(pwd)/$$(basename "`pwd`"):/srv/$$(basename "`pwd`") \
