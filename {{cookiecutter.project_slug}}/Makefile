@@ -46,12 +46,7 @@ stop:
 		echo "Please create docker-compose.yml file in project root"; \
 	fi
 cli:
-	docker run --rm -it \
-        -v $$(pwd)/$$(basename "`pwd`"):/srv/$$(basename "`pwd`") \
-		-w /srv/$$(basename "`pwd`") \
-		--user "$$(id -u):$$(id -g)" \
-        --name $$(basename "`pwd`")_cli \
-    php:${PHP_VERSION}-fpm-ext bin/$$(basename "`pwd`") $(filter-out $@,$(MAKECMDGOALS))
+	docker exec -it $$(basename "`pwd`")_app_$$(id -u) bin/$$(basename "`pwd`") $(filter-out $@,$(MAKECMDGOALS))
 unittest:
 	docker run --rm -it \
         -v $$(pwd)/$$(basename "`pwd`"):/srv/$$(basename "`pwd`") \
