@@ -10,6 +10,8 @@ help: ## This help.
 
 THIS_FILE := $(lastword $(MAKEFILE_LIST))
 PHP_VERSION ?= "7.4"
+COMPOSER_VERSION ?= "2"
+PROJECT_NAME := "$$(basename `pwd` | cut -d. -f1 )"
 
 %:
 	@echo ""
@@ -46,46 +48,51 @@ stop:
 		echo "Please create docker-compose.yml file in project root"; \
 	fi
 cli:
-	docker exec -it $$(basename "`pwd`")_app_$$(id -u) bin/$$(basename "`pwd`") $(filter-out $@,$(MAKECMDGOALS))
+	docker run --rm -it \
+        -v $$(pwd)/${PROJECT_NAME}:/srv/${PROJECT_NAME} \
+		-w /srv/${PROJECT_NAME} \
+		--user "$$(id -u):$$(id -g)" \
+        --name ${PROJECT_NAME}_cli \
+    php:${PHP_VERSION}-fpm-ext bin/${PROJECT_NAME} $(filter-out $@,$(MAKECMDGOALS))
 unittest:
 	docker run --rm -it \
-        -v $$(pwd)/$$(basename "`pwd`"):/srv/$$(basename "`pwd`") \
-		-w /srv/$$(basename "`pwd`") \
+        -v $$(pwd)/${PROJECT_NAME}:/srv/${PROJECT_NAME} \
+		-w /srv/${PROJECT_NAME} \
 		--user "$$(id -u):$$(id -g)" \
-        --name $$(basename "`pwd`")_cli \
+        --name ${PROJECT_NAME}_cli \
     php:${PHP_VERSION}-fpm-ext vendor/bin/phpunit --verbose --debug test
 composer-install:
 	docker run --rm -it \
-        -v $$(pwd)/$$(basename "`pwd`"):/srv/$$(basename "`pwd`") \
-        -w /srv/$$(basename "`pwd`") \
-        -e COMPOSER_HOME="/srv/$$(basename "`pwd`")/.composer" \
+        -v $$(pwd)/${PROJECT_NAME}:/srv/${PROJECT_NAME} \
+        -w /srv/${PROJECT_NAME} \
+        -e COMPOSER_HOME="/srv/${PROJECT_NAME}/.composer" \
         --user $$(id -u):$$(id -g) \
-    composer composer install --no-plugins --no-scripts --prefer-dist -v
+    composer:${COMPOSER_VERSION} composer install --no-plugins --no-scripts --prefer-dist -v
 composer-update:
 	docker run --rm -it \
-        -v $$(pwd)/$$(basename "`pwd`"):/srv/$$(basename "`pwd`") \
-        -w /srv/$$(basename "`pwd`") \
-        -e COMPOSER_HOME="/srv/$$(basename "`pwd`")/.composer" \
+        -v $$(pwd)/${PROJECT_NAME}:/srv/${PROJECT_NAME} \
+        -w /srv/${PROJECT_NAME} \
+        -e COMPOSER_HOME="/srv/${PROJECT_NAME}/.composer" \
         --user $$(id -u):$$(id -g) \
-    composer composer update --no-plugins --no-scripts --prefer-dist -v
+    composer:${COMPOSER_VERSION} composer update --no-plugins --no-scripts --prefer-dist -v
 composer:
 	docker run --rm -it \
-        -v $$(pwd)/$$(basename "`pwd`"):/srv/$$(basename "`pwd`") \
-        -w /srv/$$(basename "`pwd`") \
-        -e COMPOSER_HOME="/srv/$$(basename "`pwd`")/.composer" \
+        -v $$(pwd)/${PROJECT_NAME}:/srv/${PROJECT_NAME} \
+        -w /srv/${PROJECT_NAME} \
+        -e COMPOSER_HOME="/srv/${PROJECT_NAME}/.composer" \
         --user $$(id -u):$$(id -g) \
-    composer composer $(filter-out $@,$(MAKECMDGOALS))
+    composer:${COMPOSER_VERSION} composer $(filter-out $@,$(MAKECMDGOALS))
 yarn-install:
 	docker run --rm -it \
-		-v $$(pwd)/$$(basename "`pwd`"):/srv/$$(basename "`pwd`") \
-		-w /srv/$$(basename "`pwd`") \
+		-v $$(pwd)/${PROJECT_NAME}:/srv/${PROJECT_NAME} \
+		-w /srv/${PROJECT_NAME} \
 		-e NODE_ENV=production \
 		--user $$(id -u):$$(id -g) \
 	node:lts-slim yarn install
 yarn:
 	docker run --rm -it \
-		-v $$(pwd)/$$(basename "`pwd`"):/srv/$$(basename "`pwd`") \
-		-w /srv/$$(basename "`pwd`") \
+		-v $$(pwd)/${PROJECT_NAME}:/srv/${PROJECT_NAME} \
+		-w /srv/${PROJECT_NAME} \
 		-e NODE_ENV=production \
 		--user $$(id -u):$$(id -g) \
 	node:lts-slim yarn $(filter-out $@,$(MAKECMDGOALS))

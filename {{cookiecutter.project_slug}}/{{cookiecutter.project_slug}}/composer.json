@@ -21,7 +21,7 @@
     },
     "require": {
         "php": "^7.4",
-        "itseasy/slim-app": "^1.1",
+        "itseasy/slim-app": "dev-main",
         "itseasy/laminas-db": "dev-main"
     },
     "require-dev" : {
