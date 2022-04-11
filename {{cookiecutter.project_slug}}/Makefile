@@ -10,7 +10,6 @@ help: ## This help.
 
 THIS_FILE := $(lastword $(MAKEFILE_LIST))
 PHP_VERSION ?= "7.4"
-COMPOSER_VERSION ?= "2"
 PROJECT_NAME := "$$(basename `pwd` | cut -d. -f1 )"
 
 %:
@@ -67,21 +66,21 @@ composer-install:
         -w /srv/${PROJECT_NAME} \
         -e COMPOSER_HOME="/srv/${PROJECT_NAME}/.composer" \
         --user $$(id -u):$$(id -g) \
-    composer:${COMPOSER_VERSION} composer install --no-plugins --no-scripts --prefer-dist -v
+    composer composer install --no-plugins --no-scripts --prefer-dist -v
 composer-update:
 	docker run --rm -it \
         -v $$(pwd)/${PROJECT_NAME}:/srv/${PROJECT_NAME} \
         -w /srv/${PROJECT_NAME} \
         -e COMPOSER_HOME="/srv/${PROJECT_NAME}/.composer" \
         --user $$(id -u):$$(id -g) \
-    composer:${COMPOSER_VERSION} composer update --no-plugins --no-scripts --prefer-dist -v
+    composer composer update --no-plugins --no-scripts --prefer-dist -v
 composer:
 	docker run --rm -it \
         -v $$(pwd)/${PROJECT_NAME}:/srv/${PROJECT_NAME} \
         -w /srv/${PROJECT_NAME} \
         -e COMPOSER_HOME="/srv/${PROJECT_NAME}/.composer" \
         --user $$(id -u):$$(id -g) \
-    composer:${COMPOSER_VERSION} composer $(filter-out $@,$(MAKECMDGOALS))
+    composer composer $(filter-out $@,$(MAKECMDGOALS))
 yarn-install:
 	docker run --rm -it \
 		-v $$(pwd)/${PROJECT_NAME}:/srv/${PROJECT_NAME} \
