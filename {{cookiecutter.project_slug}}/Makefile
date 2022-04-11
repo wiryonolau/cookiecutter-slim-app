@@ -88,7 +88,14 @@ yarn-install:
 		-w /srv/${PROJECT_NAME} \
 		-e NODE_ENV=production \
 		--user $$(id -u):$$(id -g) \
-	node:lts-slim yarn install
+	node:lts-slim yarn install --production=false
+yarn-build:
+	docker run --rm -it \
+		-v $$(pwd)/${PROJECT_NAME}:/srv/${PROJECT_NAME} \
+		-w /srv/${PROJECT_NAME} \
+		-e NODE_ENV=production \
+		--user $$(id -u):$$(id -g) \
+	node:lts-slim yarn run build
 yarn:
 	docker run --rm -it \
 		-v $$(pwd)/${PROJECT_NAME}:/srv/${PROJECT_NAME} \

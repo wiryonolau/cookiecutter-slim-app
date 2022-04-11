@@ -1,0 +1,11 @@
+{
+    "comments" : false,
+    "only": [
+        "./asset/js/src"
+    ],
+    "presets": [
+        "@babel/preset-react",
+        "minify"
+    ]
+}
+

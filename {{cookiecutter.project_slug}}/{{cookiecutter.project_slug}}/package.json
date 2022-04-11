@@ -1,5 +1,14 @@
 {
   "name": "{{ cookiecutter.project_slug }}",
   "license": "UNLICENSED",
-  "private": true
+  "private": true,
+  "scripts": {
+    "build": "babel ./asset/js/src/ -d asset/js/dist/ --presets @babel/preset-react --no-babelrc --no-comments --minified"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.17.6",
+    "@babel/core": "^7.17.9",
+    "@babel/preset-react": "^7.16.7",
+    "babel-preset-minify": "^0.5.1"
+  }
 }
