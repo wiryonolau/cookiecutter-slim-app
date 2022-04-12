@@ -3,7 +3,7 @@
   "license": "UNLICENSED",
   "private": true,
   "scripts": {
-    "build": "babel ./asset/js/src/ -d asset/js/dist/ --presets @babel/preset-react --no-babelrc --no-comments --minified"
+    "build": "babel ./asset/js/src/ -d asset/js/dist/ --source-maps"
   },
   "devDependencies": {
     "@babel/cli": "^7.17.6",
