@@ -43,7 +43,7 @@ class UserAction extends InvokableAction {
         $user = $this->userProvider->getUserById(intval($user_id));
 
         if (!$user->id) {
-            throw new HttpForbiddenException($this->request, 403);
+            throw new HttpForbiddenException($this->request);
         }
 
         if ($this->getQuery("delete", false)) {

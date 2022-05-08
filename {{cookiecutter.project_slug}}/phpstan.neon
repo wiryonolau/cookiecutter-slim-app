@@ -1,0 +1,10 @@
+parameters:
+    level: 5
+    paths:
+        - {{cookiecutter.project_slug}}/src
+    phpVersion: 70400
+    bootstrapFiles:
+        - {{cookiecutter.project_slug}}/public/index.php
+        - phpstan.alias.php
+    reportUnmatchedIgnoredErrors: false
+    inferPrivatePropertyTypeFromConstructor: true
