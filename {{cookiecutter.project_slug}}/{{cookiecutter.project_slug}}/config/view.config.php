@@ -7,8 +7,6 @@ use DI;
 
 return [
     "view" => [
-        "class" => View\LaminasView::class,
-        "renderer" => View\Renderer\LaminasPhpRenderer::class,
         "template_path" => __DIR__."/../view/",
     ],
     "asset" => [
