@@ -1,0 +1,28 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label" : "Babel Watch",
+            "type": "shell",
+            "group": "none",
+            "command" : "${workspaceRoot}/{{cookiecutter.project_slug}}/node_modules/.bin/babel",
+            "args" : [
+                "${workspaceRoot}/{{cookiecutter.project_slug}}/asset/js/src/",
+                "--config-file=${workspaceRoot}/{{cookiecutter.project_slug}}/.babelrc",
+                "--out-dir=${workspaceRoot}/{{cookiecutter.project_slug}}/asset/js/dist/",
+                "--watch"
+            ],
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "runOptions": {
+                "runOn": "folderOpen"
+            }
+        }
+    ]
+}

@@ -26,6 +26,7 @@ $app = new Itseasy\Application([
     ],
     'module' => [
         \Laminas\Form\Module::class,
+        \Laminas\Cache\Module::class
     ],
 ]);
 $app->build();
