@@ -3,7 +3,7 @@ version: "3.2"
 services:
     nginx:
         image: nginx:alpine
-        container_name: {{ cookiecutter.package_name }}_nginx_${USERID:-1000}
+        container_name: {{ cookiecutter.project_slug }}_nginx_${USERID:-1000}
         ports:
             - ${HTTP_PORT:-8080}:80
         volumes:
@@ -14,9 +14,9 @@ services:
         build:
             context: ./docker/php-fpm-ext
             args:
-                - PHP_VERSION=${PHP_VERSION:-7.4}
-        image: php:${PHP_VERSION:-7.4}-fpm-ext
-        container_name: {{ cookiecutter.package_name }}_app_${USERID:-1000}
+                - PHP_VERSION=${PHP_VERSION:-8.1}
+        image: php:${PHP_VERSION:-8.1}-fpm-ext
+        container_name: {{ cookiecutter.project_slug }}_app_${USERID:-1000}
         command:
             - /bin/bash
             - -c
@@ -39,7 +39,7 @@ services:
             - db
     db:
         image: mariadb:10.6
-        container_name: {{ cookiecutter.package_name }}_db_${USERID:-1000}
+        container_name: {{ cookiecutter.project_slug }}_db_${USERID:-1000}
         ports:
             - ${MYSQL_PORT:-3306}:3306
         environment:

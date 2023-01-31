@@ -8,7 +8,7 @@ help: ## This help.
 .DEFAULT_GOAL := help
 
 THIS_FILE := $(lastword $(MAKEFILE_LIST))
-PHP_VERSION ?= "7.4"
+PHP_VERSION ?= "8.1"
 PROJECT_NAME := "$$(basename `pwd` | cut -d. -f1 )"
 
 %:
@@ -46,7 +46,7 @@ stop:
 		echo "Please create docker-compose.yml file in project root"; \
 	fi
 init-db:
-	@while [ $$(docker inspect --format='{{json .State.Health.Status}}' dax_db_1000) != "\"healthy\"" ]; do \
+	@while [ $$(docker inspect --format='{{json .State.Health.Status}}' ${PROJECT_NAME}_db_1000) != "\"healthy\"" ]; do \
         echo "Waiting for container ${PROJECT_NAME}_db_$$(id -u) to be healthy"; \
         sleep 2; \
     done

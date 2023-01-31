@@ -22,9 +22,9 @@
     },
     "require": {
         "php": "^8",
-        "itseasy/slim-app": "dev-main",
-        "itseasy/laminas-db": "dev-main",
-        "laminas/laminas-form": "^3.1"
+        "itseasy/slim-app": "dev-php8",
+        "itseasy/laminas-db": "dev-php8",
+        "laminas/laminas-form": "^3.5"
     },
     "require-dev" : {
         "phpunit/phpunit": "^9.5"

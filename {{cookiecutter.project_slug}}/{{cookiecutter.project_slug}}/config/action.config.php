@@ -3,12 +3,12 @@ declare(strict_types=1);
 
 namespace {{ cookiecutter.project_namespace }}\Action;
 
-use DI;
+use Laminas\ServiceManager\Factory\InvokableFactory;
 
 return [
     "action" => [
         "factories" => [
-            DashboardAction::class => DI\create(),
+            DashboardAction::class => InvokableFactory::class,
             UserAction::class => Factory\UserActionFactory::class
         ],
     ]

@@ -25,9 +25,13 @@ $app = new Itseasy\Application([
         __DIR__.'/../config/*.{local,config}.php',
     ],
     'module' => [
+        ModuleTest\Module::class,
         \Laminas\Form\Module::class,
-        \Laminas\Cache\Module::class
+        \Laminas\Cache\Module::class,
+        \Laminas\Cache\Storage\Adapter\Filesystem\Module::class
     ],
+    'container_provider' => \Itseasy\ServiceManager\LaminasServiceManager::class,
 ]);
 $app->build();
 $app->run();
+

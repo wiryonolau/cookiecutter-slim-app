@@ -58,7 +58,7 @@ return [
                 function()  use ($table) { 
                     $constraint = new ConstraintObject("PRIMARY", $table->getName());
                     $constraint->setType("PRIMARY KEY");
-                    $constraint->setColumns($columns);
+                    $constraint->setColumns(["id"]);
                     return $constraint;
                 }
             ]);
