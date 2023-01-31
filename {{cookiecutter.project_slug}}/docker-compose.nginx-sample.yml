@@ -3,6 +3,7 @@ version: "3.2"
 services:
     nginx:
         image: nginx:alpine
+        container_name: {{ cookiecutter.package_name }}_nginx_${USERID:-1000}
         ports:
             - ${HTTP_PORT:-8080}:80
         volumes:
@@ -15,6 +16,7 @@ services:
             args:
                 - PHP_VERSION=${PHP_VERSION:-7.4}
         image: php:${PHP_VERSION:-7.4}-fpm-ext
+        container_name: {{ cookiecutter.package_name }}_app_${USERID:-1000}
         command:
             - /bin/bash
             - -c
@@ -23,18 +25,21 @@ services:
               groupmod -g ${GROUPID:-1000} www-data
               php-fpm
         environment:
-            - MYSQL_USER={{ cookiecutter.database_name }}
-            - MYSQL_PASSWORD=888888
-            - MYSQL_DATABASE={{ cookiecutter.database_name }}
-            - MYSQL_HOSTNAME=mysql
+            - DB_USERNAME={{ cookiecutter.database_name }}
+            - DB_PASSWORD=888888
+            - DB_DATABASE={{ cookiecutter.database_name }}
+            - DB_HOSTNAME=db
+            - DB_PORT=3306
+            - DB_DRIVER=pdo_mysql
         volumes:
             - ./{{ cookiecutter.project_slug }}:/var/www/html
             - ./usr/local/etc/php/php.ini:/usr/local/etc/php/php.ini
         restart: unless-stopped
         depends_on:
-            - mysql
-    mysql:
-        image: mysql:8.0
+            - db
+    db:
+        image: mariadb:10.6
+        container_name: {{ cookiecutter.package_name }}_db_${USERID:-1000}
         ports:
             - ${MYSQL_PORT:-3306}:3306
         environment:
@@ -42,8 +47,6 @@ services:
             - MYSQL_USER={{ cookiecutter.database_name }}
             - MYSQL_PASSWORD=888888
             - MYSQL_DATABASE={{ cookiecutter.database_name }}
-        volumes:
-            - ./init_db:/docker-entrypoint-initdb.d
         command:
             - --character-set-server=utf8mb4
             - --collation-server=utf8mb4_unicode_ci
@@ -52,8 +55,8 @@ services:
                 - "CMD"
                 - "mysqladmin"
                 - "ping"
-                - "--user=`cat MYSQL_USER`"
-                - "--password=`cat MYSQL_PASSWORD`"
+                - "--user=$MYSQL_USER"
+                - "--password=$MYSQL_PASSWORD"
                 - "-h"
                 - "localhost"
             timeout: 5s

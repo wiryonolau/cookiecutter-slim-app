@@ -14,14 +14,14 @@
     ],
     "config": {
         "platform" : {
-            "php" : "7.4.29",
+            "php" : "8.1.11",
             "ext-gd" : "1",
             "ext-intl" : "1",
             "ext-sockets": "1"
         }
     },
     "require": {
-        "php": "^7.4",
+        "php": "^8",
         "itseasy/slim-app": "dev-main",
         "itseasy/laminas-db": "dev-main",
         "laminas/laminas-form": "^3.1"

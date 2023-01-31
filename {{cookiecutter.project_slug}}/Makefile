@@ -45,13 +45,26 @@ stop:
 	else \
 		echo "Please create docker-compose.yml file in project root"; \
 	fi
+init-db:
+	@while [ $$(docker inspect --format='{{json .State.Health.Status}}' dax_db_1000) != "\"healthy\"" ]; do \
+        echo "Waiting for container ${PROJECT_NAME}_db_$$(id -u) to be healthy"; \
+        sleep 2; \
+    done
+	@if [ -f "$$(pwd)/${PROJECT_NAME}/db/schema.php" ]; then \
+        docker exec -it ${PROJECT_NAME}_app_$$(id -u) vendor/bin/itseasy-db db:diff --disable-fk --apply -f db/schema.php; \
+    fi
+	@if [ -f "$$(pwd)/${PROJECT_NAME}/db/data.php" ]; then \
+        docker exec -it ${PROJECT_NAME}_app_$$(id -u) vendor/bin/itseasy-db db:data --disable-fk --use-tx -f db/data.php; \
+    fi
+	@if [ -f "$$(pwd)/${PROJECT_NAME}/db/data.local.php" ]; then \
+        docker exec -it ${PROJECT_NAME}_app_$$(id -u) vendor/bin/itseasy-db db:data --disable-fk --use-tx -f db/data.local.php; \
+    fi
 cli:
-	docker run --rm -it \
-		-v $$(pwd)/${PROJECT_NAME}:/srv/${PROJECT_NAME} \
-		-w /srv/${PROJECT_NAME} \
-		--user "$$(id -u):$$(id -g)" \
-		--name ${PROJECT_NAME}_cli \
-	php:${PHP_VERSION}-fpm-ext bin/${PROJECT_NAME} $(filter-out $@,$(MAKECMDGOALS))
+	@if [ "$$(docker inspect --format="{{.Id}}" ${PROJECT_NAME}_app_$$(id -u) 2>/dev/null)" ]; then \
+        docker exec -it ${PROJECT_NAME}_app_$$(id -u) bin/${PROJECT_NAME} $(filter-out $@,$(MAKECMDGOALS)); \
+    else \
+        echo "Please start application first"; \
+    fi
 unittest:
 	docker run --rm -it \
 		-v $$(pwd)/${PROJECT_NAME}:/srv/${PROJECT_NAME} \
