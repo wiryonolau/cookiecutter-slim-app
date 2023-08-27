@@ -39,6 +39,7 @@ start:
 	else \
 		echo "Please create docker-compose.yml file in project root"; \
 	fi
+	$(MAKE) -s init-db
 stop:
 	@if [ -f "$$(pwd)/docker-compose.yml" ]; then \
 		USERID=$$(id -u) GROUPID=$$(id -g) docker-compose -f docker-compose.yml down -v; \

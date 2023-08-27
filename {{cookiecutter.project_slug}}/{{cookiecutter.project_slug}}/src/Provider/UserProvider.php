@@ -15,13 +15,15 @@ class UserProvider {
         $this->userRepository = $userRepository;
     }
 
-    public function listUser() : Traversable {
-        $result = $this->userRepository->listUser();
+    public function listUser(): Traversable
+    {
+        $result = $this->userRepository->getRows();
         return $result->getRows(new CollectionModel(new UserModel()));
     }
 
-    public function getUserById(int $id) : UserModel {
-        $result = $this->userRepository->getUserById($id);
+    public function getUserById(int $id): UserModel
+    {
+        $result = $this->userRepository->getRowByIdentifier($id);
         return $result->getFirstRow(UserModel::class);
     }
 }

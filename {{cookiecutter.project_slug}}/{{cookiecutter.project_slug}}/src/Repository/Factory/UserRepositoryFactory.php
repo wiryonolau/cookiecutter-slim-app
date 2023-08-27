@@ -10,6 +10,6 @@ use {{ cookiecutter.project_namespace }}\Repository\UserRepository;
 class UserRepositoryFactory {
     public function __invoke(ContainerInterface $container) {
         $db = $container->get(Database::class);
-        return new UserRepository($db);
+        return new UserRepository($db, "user");
     }
 }

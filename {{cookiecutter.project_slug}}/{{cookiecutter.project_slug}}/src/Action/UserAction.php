@@ -28,6 +28,7 @@ class UserAction extends InvokableAction {
                     "layout" => [
                         "content_title" => "Add New User"
                     ],
+                    "user" => new UserModel()
                 ]);
             }
 
@@ -64,7 +65,8 @@ class UserAction extends InvokableAction {
         ]);
     }
 
-    public function httpPost() : ResponseInterface {
+    public function httpPost(): ResponseInterface
+    {
         $data = (array)$this->request->getParsedBody();
         $user = new UserModel();
 
@@ -73,11 +75,7 @@ class UserAction extends InvokableAction {
 
         if (!$user->id) {
             $this->view->flash()->set("warning", "Unable to save user data");
-            return $this->render("user/form", [
-                "layout" => [
-                    "content_title" =>  "Edit User"
-                ],
-            ]);
+            return $this->response->withHeader("Location", "/user/list");
         }
 
         $this->view->flash()->set("success", "Data Updated");

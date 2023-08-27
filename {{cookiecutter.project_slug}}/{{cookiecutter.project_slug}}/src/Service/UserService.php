@@ -5,7 +5,6 @@ namespace {{ cookiecutter.project_namespace }}\Service;
 
 use {{ cookiecutter.project_namespace }}\Model\UserModel;
 use {{ cookiecutter.project_namespace }}\Repository\UserRepository;
-use Itseasy\Database\Result;
 
 class UserService {
     protected $userRepository;
@@ -14,12 +13,14 @@ class UserService {
         $this->userRepository = $userRepository;
     }
 
-    public function save(UserModel $user) {
-        return $this->userRepository->save($user);
+    public function save(UserModel $user)
+    {
+        return $this->userRepository->upsert($user);
     }
 
-    public function remove(UserModel $user) : bool {
-        $result = $this->userRepository->remove($user);
+    public function remove(UserModel $user): bool
+    {
+        $result = $this->userRepository->delete(["id" => $user->id]);
         if ($result->isError()) {
             return false;
         }

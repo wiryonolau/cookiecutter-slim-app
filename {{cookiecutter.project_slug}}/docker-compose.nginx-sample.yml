@@ -55,8 +55,8 @@ services:
                 - "CMD"
                 - "mysqladmin"
                 - "ping"
-                - "--user=$MYSQL_USER"
-                - "--password=$MYSQL_PASSWORD"
+                - "--user={{ cookiecutter.database_name }}"
+                - "--password=888888"
                 - "-h"
                 - "localhost"
             timeout: 5s
