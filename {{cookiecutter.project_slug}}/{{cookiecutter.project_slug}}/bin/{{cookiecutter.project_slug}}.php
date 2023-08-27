@@ -1,8 +1,9 @@
 <?php
+
 declare(strict_types=1);
 
 // Define application base directory
-define("APP_DIR", realpath(__DIR__."/../"));
+define("APP_DIR", realpath(__DIR__ . "/../"));
 
 chdir(dirname(__DIR__));
 
@@ -21,9 +22,15 @@ include __DIR__ . '/../public/helper.php';
 
 $app = new Itseasy\Application([
     "config_path" => [
-        __DIR__."/../config/*.{local,config}.php",
-    ]
+        __DIR__ . "/../config/*.{local,config}.php",
+    ],
+    'module' => [
+        \Laminas\Form\Module::class,
+        \Laminas\Cache\Module::class,
+        \Laminas\Cache\Storage\Adapter\Filesystem\Module::class,
+    ],
+    'container_provider' => \Itseasy\ServiceManager\LaminasServiceManager::class,
 ]);
-$app->setApplicationType(Itseasy\Application::APP_CONSOLE); 
+$app->setApplicationType(Itseasy\Application::APP_CONSOLE);
 $app->build();
 $app->run();
