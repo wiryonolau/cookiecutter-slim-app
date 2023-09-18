@@ -1,6 +1,6 @@
 <html>
 <head>
-<title><?= $title ?? {{ cookiecutter.project_namespace }} ?></title>
+<title><?= $title ?? "{{ cookiecutter.project_slug }}" ?></title>
 
 <!-- Load css or js define in action -->
 <?= $this->headLink()
